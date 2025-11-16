@@ -49,15 +49,21 @@
   "banner": [
     {
       "id": 1,
-      "image": "https://i.imgur.com/0hYQp9U.jpg"
+      "image": "https://i.imgur.com/0hYQp9U.jpg",
+      "link_type"= 2,
+      "link_value" = "0"
     },
     {
       "id": 2,
-      "image": "https://i.imgur.com/zO9s5PO.jpg"
+      "image": "https://i.imgur.com/zO9s5PO.jpg",
+      "link_type"= 2,
+      "link_value" = "0"
     },
     {
       "id": 3,
-      "image": "https://i.imgur.com/72NfyMr.jpg"
+      "image": "https://i.imgur.com/72NfyMr.jpg",
+      "link_type"= 2,
+      "link_value" = "0"
     }
   ],
   "user": [
