@@ -1,7 +1,7 @@
 {
   "product": [
     {
-      "id": "1",
+      "id": 1,
       "title": "کفش ورزشی مدل Legend React 3",
       "price": 268000,
       "discount": 2000,
@@ -10,7 +10,7 @@
       "previous_price": 270000
     },
     {
-      "id": "2",
+      "id": 2,
       "title": "کفش بسکتبال Jordan React",
       "price": 790000,
       "discount": 0,
@@ -19,7 +19,7 @@
       "previous_price": 790000
     },
     {
-      "id": "3",
+      "id": 3,
       "title": "کفش Air Zoom Pegasus 37",
       "price": 683000,
       "discount": 100000,
@@ -28,7 +28,7 @@
       "previous_price": 783000
     },
     {
-      "id": "4",
+      "id": 4,
       "title": "Nike Air Max 270",
       "price": 180000,
       "discount": 0,
@@ -37,7 +37,7 @@
       "previous_price": 180000
     },
     {
-      "id": "5",
+      "id": 5,
       "title": "Nike Air Zoom Pegasus 40",
       "price": 150000,
       "discount": 0,
@@ -48,27 +48,27 @@
   ],
   "banner": [
     {
-      "id": "1",
+      "id": 1,
       "image": "https://i.imgur.com/0hYQp9U.jpg"
     },
     {
-      "id": "2",
+      "id": 2,
       "image": "https://i.imgur.com/zO9s5PO.jpg"
     },
     {
-      "id": "3",
+      "id": 3,
       "image": "https://i.imgur.com/72NfyMr.jpg"
     }
   ],
   "user": [
     {
-      "id": "1",
+      "id": 1,
       "email": "test@gmail.com",
       "password": "123456",
       "name": "Test User"
     },
     {
-      "id": "2",
+      "id": 2,
       "email": "saeedd@gmail.com",
       "password": "saeed",
       "name": "Saeed D."
@@ -76,14 +76,14 @@
   ],
   "comment": [
     {
-      "id": "1",
+      "id": 1,
       "product_id": "1",
       "title": "خیلی شیک و اسپرت",
       "content": "یکی از بهترین کفش‌هایی که تا حالا دیدم. خیلی راحته.",
       "user": "Test User"
     },
     {
-      "id": "2",
+      "id": 2,
       "product_id": "3",
       "title": "عالی برای دویدن",
       "content": "کفش سبکیه و پاش خیلی خوب می‌شینه.",
