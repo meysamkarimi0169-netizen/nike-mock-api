@@ -213,7 +213,7 @@ app.get('/api/v1/comment/list', (req, res) => {
   const db = readData();
   const comments = db.comment || [];
   if (product_id) {
-    return res.json(comments.filter(c => c.id === product_id.toString()));
+    return res.json(comments.filter(c => c.id === product_id));
   }
   res.json(comments);
 });
