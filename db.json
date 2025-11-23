@@ -81,19 +81,24 @@
     }
   ],
   "comment": [
-       {
-      "id": "1",
-      "product_id": "1",
+  "comment": [
+    {
+      "id": 1,
       "title": "خیلی شیک و اسپرت",
       "content": "یکی از بهترین کفش‌هایی که تا حالا دیدم. خیلی راحته.",
-      "user": "Test User"
+      "data": "1398.29.56, 06:04",
+      "author": {
+        "email": "Meysam.karimi0669@gmail.com"
     },
+    }
     {
-      "id": "2",
-      "product_id": "3",
+      "id": 2,
       "title": "عالی برای دویدن",
       "content": "کفش سبکیه و پاش خیلی خوب می‌شینه.",
-      "user": "Saeed D."
+      "data": "1404.27.56, 06:04",
+      "author": {
+        "email": "Meysam.karimi0569@gmail.com"
+    }
     }
   ],
   "cart": [],
