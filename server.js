@@ -208,14 +208,60 @@ app.get('/api/v1/order/update/status', (req, res) => {
 });
 
 // COMMENT: list and add
+// COMMENT: list and add (New version supports missing product_id in db.json)
+
 app.get('/api/v1/comment/list', (req, res) => {
   const product_id = req.query.product_id;
   const db = readData();
   const comments = db.comment || [];
-  if (product_id) {
-    return res.json(comments.filter(c => c.product_id === product_id.toString()));
+
+  // اگر product_id نیامده بود → همه نظرات را برگردان
+  if (!product_id) {
+    return res.json(comments);
   }
-  res.json(comments);
+
+  // اگر product_id وجود دارد:
+  // 1. اگر کامنت‌ها product_id داشته باشند → فیلتر کن
+  // 2. اگر کامنت‌ها product_id نداشته باشند → چیزی فیلتر نکن (بازهم همه را برگردان)
+  
+  const hasProductId = comments.some(c => c.product_id !== undefined);
+
+  if (!hasProductId) {
+    // محصولی وجود ندارد → همه را برگردان
+    return res.json(comments);
+  }
+
+  // حالت عادی: فیلتر بر اساس product_id
+  const filtered = comments.filter(c => c.product_id == product_id.toString());
+  res.json(filtered);
+});
+
+
+app.post('/api/v1/comment/add', (req, res) => {
+  const { title, content, product_id, user } = req.body || {};
+  
+  const db = readData();
+  db.comment = db.comment || [];
+
+  const id = (db.comment.length 
+    ? (Math.max(...db.comment.map(c => parseInt(c.id))) + 1) 
+    : 1
+  ).toString();
+
+  // اگر product_id داده نشود → undefined می‌ماند (برای سازگاری با db.json جدید)
+  const newComment = { 
+    id, 
+    title: title || '', 
+    content: content || '', 
+    product_id: product_id !== undefined ? product_id.toString() : undefined,
+    data: new Date().toISOString(),
+    author: user || { email: "anonymous@example.com" }
+  };
+
+  db.comment.push(newComment);
+  writeData(db);
+  
+  res.json({ success: true, comment: newComment });
 });
 
 app.post('/api/v1/comment/add', (req, res) => {
