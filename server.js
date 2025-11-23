@@ -215,6 +215,9 @@ app.get('/api/v1/comment/list', (req, res) => {
   if (product_id) {
     return res.json(comments.filter(c => c.id === product_id));
   }
+  else{
+     return res.json('hi');
+  }
   res.json(comments);
 });
 
