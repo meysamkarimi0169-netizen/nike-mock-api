@@ -77,14 +77,23 @@ app.get('/api/v1/banner/slider', (req, res) => {
   res.json(db.banner || []);
 });
 
+
+
 // SIMPLE oauth/token mock (grant_type=password)
 app.post('/api/v1/oauth/token', (req, res) => {
   const { grant_type, username, password, client_id } = req.body || {};
-  const db = readData();
+
+  // چاپ کل body
+  console.log('req.body:', req.body);
+
+  // چاپ مقدار grant_type
+  console.log('grant_type:', grant_type);
+
   if (grant_type === 'password') {
+    console.log('Entered password grant_type');
     const user = (db.user || []).find(u => u.email === username && u.password === password);
     if (!user) return res.status(400).json({ error: 'invalid_credentials' });
-    // issue a simple token
+
     const token = Buffer.from(`${user.email}:${Date.now()}`).toString('base64');
     const refresh_token = Buffer.from(`refresh:${user.email}:${Date.now()}`).toString('base64');
     return res.json({
@@ -94,7 +103,7 @@ app.post('/api/v1/oauth/token', (req, res) => {
       refresh_token
     });
   } else if (grant_type === 'refresh_token') {
-    // simple refresh echo
+    console.log('Entered refresh_token grant_type');
     const refresh_token = req.body.refresh_token;
     if (!refresh_token) return res.status(400).json({ error: 'no_refresh_token' });
     const token = Buffer.from(`refreshed:${Date.now()}`).toString('base64');
@@ -104,8 +113,13 @@ app.post('/api/v1/oauth/token', (req, res) => {
       expires_in: 3600
     });
   }
+
+  console.log('Unsupported grant_type reached');
   res.status(400).json({ error: 'unsupported_grant_type' });
 });
+
+
+
 
 // USER register (add minimal user)
 app.post('/api/v1/user/register', (req, res) => {
