@@ -80,7 +80,6 @@ app.get('/api/v1/banner/slider', (req, res) => {
 
 const multer = require('multer');
 
-const app = express();
 const upload = multer(); // فقط پارس فرم، بدون ذخیره فایل
 
 // دیتابیس نمونه
