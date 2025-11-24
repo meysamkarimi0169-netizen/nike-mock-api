@@ -78,17 +78,6 @@ app.get('/api/v1/banner/slider', (req, res) => {
 });
 
 
-const multer = require('multer');
-
-const upload = multer(); // فقط پارس فرم، بدون ذخیره فایل
-
-// دیتابیس نمونه
-const db = {
-  user: [
-    { email: 'test@example.com', password: '123456' }
-  ]
-};
-
 app.post('/api/v1/oauth/token', upload.none(), (req, res) => {
   console.log('req.body:', req.body);  // حالا grant_type و بقیه میاد
   const { grant_type, username, password } = req.body;
