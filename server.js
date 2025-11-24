@@ -78,8 +78,6 @@ app.get('/api/v1/banner/slider', (req, res) => {
 });
 
 
-
-const express = require('express');
 const multer = require('multer');
 
 const app = express();
