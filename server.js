@@ -79,23 +79,30 @@ app.get('/api/v1/banner/slider', (req, res) => {
 
 
 
-// SIMPLE oauth/token mock (grant_type=password)
-app.post('/api/v1/oauth/token', (req, res) => {
-  const { grant_type, username, password, client_id } = req.body || {};
+const express = require('express');
+const multer = require('multer');
 
-  // چاپ کل body
-  console.log('req.body:', req.body);
+const app = express();
+const upload = multer(); // فقط پارس فرم، بدون ذخیره فایل
 
-  // چاپ مقدار grant_type
-  console.log('grant_type:', grant_type);
+// دیتابیس نمونه
+const db = {
+  user: [
+    { email: 'test@example.com', password: '123456' }
+  ]
+};
+
+app.post('/api/v1/oauth/token', upload.none(), (req, res) => {
+  console.log('req.body:', req.body);  // حالا grant_type و بقیه میاد
+  const { grant_type, username, password } = req.body;
 
   if (grant_type === 'password') {
-    console.log('Entered password grant_type');
     const user = (db.user || []).find(u => u.email === username && u.password === password);
     if (!user) return res.status(400).json({ error: 'invalid_credentials' });
 
     const token = Buffer.from(`${user.email}:${Date.now()}`).toString('base64');
     const refresh_token = Buffer.from(`refresh:${user.email}:${Date.now()}`).toString('base64');
+
     return res.json({
       access_token: token,
       token_type: 'bearer',
@@ -103,9 +110,9 @@ app.post('/api/v1/oauth/token', (req, res) => {
       refresh_token
     });
   } else if (grant_type === 'refresh_token') {
-    console.log('Entered refresh_token grant_type');
     const refresh_token = req.body.refresh_token;
     if (!refresh_token) return res.status(400).json({ error: 'no_refresh_token' });
+
     const token = Buffer.from(`refreshed:${Date.now()}`).toString('base64');
     return res.json({
       access_token: token,
@@ -114,9 +121,10 @@ app.post('/api/v1/oauth/token', (req, res) => {
     });
   }
 
-  console.log('Unsupported grant_type reached');
   res.status(400).json({ error: 'unsupported_grant_type' });
 });
+
+app.listen(3000, () => console.log('Server running on port 3000'));
 
 
 
