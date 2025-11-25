@@ -95,7 +95,7 @@ const db = {
 app.post('/api/v1/oauth/token', upload.none(), (req, res) => {
   console.log('req.body:', req.body); // نمایش داده‌ها برای debug
   const { grant_type, username, password, refresh_token } = req.body;
-
+  console.log("Incoming body:", req.body);
   if (grant_type === 'password') {
     const user = (db.user || []).find(u => u.email === username && u.password === password);
     if (!user) return res.status(400).json({ error: 'invalid_credentials' });
