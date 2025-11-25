@@ -156,7 +156,7 @@ app.post('/api/v1/user/register', (req, res) => {
   if (!email || !password) return res.status(400).json({ error: 'email_and_password_required' });
   const db = readData();
   const exists = (db.user || []).find(u => u.email === email);
-  if (exists) return res.status(420).json({ error: 'user_exists' });
+  if (exists) return res.status(422).json({ error: 'user_exists' });
   const id = (db.user && db.user.length ? (Math.max(...db.user.map(u => parseInt(u.id))) + 1) : 1).toString();
   const newUser = { id: id.toString(), email, password, name: name || '' };
   db.user = db.user || [];
