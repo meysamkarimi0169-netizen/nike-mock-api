@@ -123,9 +123,7 @@ app.post('/api/v1/oauth/token', upload.none(), (req, res) => {
   res.status(400).json({ error: 'unsupported_grant_type' });
 });
 
-// شروع سرور
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
 
 
 
