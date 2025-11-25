@@ -84,15 +84,9 @@ const upload = multer();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// دیتابیس نمونه
-const db = {
-  user: [
-    { email: 'test@example.com', password: '123456' }
-  ]
-};
-
 // مسیر oauth/token
 app.post('/api/v1/oauth/token', upload.none(), (req, res) => {
+  const db = readData();
   console.log('req.body:', req.body); // نمایش داده‌ها برای debug
   const { grant_type, username, password, refresh_token } = req.body;
   console.log("Incoming body:", req.body);
