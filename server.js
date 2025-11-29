@@ -162,34 +162,56 @@ app.post('/api/v1/oauth/token', upload.none(), (req, res) => {
   res.status(400).json({ error: 'unsupported_grant_type' });
 });
 
+
+
 app.post('/api/v1/auth/token', (req, res) => {
   const { grant_type, username, password, client_id } = req.body || {};
   const db = readData();
+
   if (grant_type === 'password') {
     const user = (db.user || []).find(u => u.email === username && u.password === password);
     if (!user) return res.status(400).json({ error: 'invalid_credentials' });
-    // issue a simple token
+
+    // ======= اینجا توکن بساز و ذخیره کن =======
     const token = Buffer.from(`${user.email}:${Date.now()}`).toString('base64');
     const refresh_token = Buffer.from(`refresh:${user.email}:${Date.now()}`).toString('base64');
+
+    user.access_token = token;
+    user.refresh_token = refresh_token;
+    writeData(db);
+    // =========================================
+
     return res.json({
       access_token: token,
       token_type: 'bearer',
       expires_in: 3600,
       refresh_token
     });
+
   } else if (grant_type === 'refresh_token') {
-    // simple refresh echo
     const refresh_token = req.body.refresh_token;
     if (!refresh_token) return res.status(400).json({ error: 'no_refresh_token' });
-    const new_access_token = Buffer.from(`access:${Date.now()}`).toString('base64');
-    const new_refresh_token = Buffer.from(`refresh:${Date.now()}`).toString('base64');
+
+    const user = (db.user || []).find(u => u.refresh_token === refresh_token);
+    if (!user) return res.status(401).json({ error: 'invalid_refresh_token' });
+
+    // ======= توکن جدید بساز و ذخیره کن =======
+    const token = Buffer.from(`${user.email}:${Date.now()}`).toString('base64');
+    const new_refresh_token = Buffer.from(`refresh:${user.email}:${Date.now()}`).toString('base64');
+
+    user.access_token = token;
+    user.refresh_token = new_refresh_token;
+    writeData(db);
+    // ========================================
+
     return res.json({
-      access_token: new_access_token,
-      refresh_token: new_refresh_token,
+      access_token: token,
       token_type: 'bearer',
+      refresh_token: new_refresh_token,
       expires_in: 3600
     });
   }
+
   res.status(400).json({ error: 'unsupported_grant_type' });
 });
 
