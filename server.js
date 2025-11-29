@@ -34,6 +34,35 @@ function paginate(items, page = 1, limit = 20) {
   return items.slice(start, start + l);
 }
 
+function authMiddleware(req, res, next) {
+    const authHeader = req.headers['authorization'];
+
+    if (!authHeader) {
+        return res.status(401).json({ error: "no_authorization_header" });
+    }
+
+    const parts = authHeader.split(" ");
+
+    if (parts.length !== 2 || parts[0] !== "Bearer") {
+        return res.status(400).json({ error: "invalid_authorization_format" });
+    }
+
+    const token = parts[1];
+    if (!token) return res.status(401).json({ error: "empty_token" });
+
+    const db = readData();
+    const user = (db.user || []).find(u => u.access_token === token);
+
+    if (!user) {
+        return res.status(401).json({ error: "invalid_or_expired_token" });
+    }
+
+    req.user = user; // کاربر معتبر پیدا شد
+    next();
+}
+
+
+
 // PRODUCT LIST with sort handling (sort same as tutorial)
 // sort: 0 = latest (by id desc), 1 = popular (no metric, return as-is), 2 = price high->low, 3 = price low->high
 app.get('/api/v1/product/list', (req, res) => {
@@ -171,10 +200,9 @@ app.post('/api/v1/user/register', (req, res) => {
 });
 
 // CART: add, list, remove, changeCount, count
-app.post('/api/v1/cart/add', (req, res) => {
+app.post('/api/v1/cart/add', authMiddleware, (req, res) => {
   const { product_id } = req.body || {};
-  
-  // اعتبارسنجی ورودی
+
   if (!product_id) {
     return res.status(400).json({ error: "product_id required" });
   }
@@ -182,7 +210,6 @@ app.post('/api/v1/cart/add', (req, res) => {
   const db = readData();
   db.cart = db.cart || [];
 
-  // تولید id خودکار
   const newId = db.cart.length
     ? Math.max(...db.cart.map(c => parseInt(c.id))) + 1
     : 1;
@@ -190,19 +217,14 @@ app.post('/api/v1/cart/add', (req, res) => {
   const item = {
     id: newId,
     product_id: parseInt(product_id),
-    count: 1
+    count: 1,
+    user_id: req.user.id
   };
 
   db.cart.push(item);
   writeData(db);
 
-  return res.json(item);
-});
-
-
-app.get('/api/v1/cart/list', (req, res) => {
-  const db = readData();
-  res.json(db.cart || []);
+  res.json(item);
 });
 
 app.post('/api/v1/cart/remove', (req, res) => {
