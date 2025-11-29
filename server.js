@@ -36,30 +36,43 @@ function paginate(items, page = 1, limit = 20) {
 
 function authMiddleware(req, res, next) {
     const authHeader = req.headers['authorization'];
+    console.log("authHeader:", authHeader); // لاگ هدر Authorization
 
     if (!authHeader) {
+        console.log("No authorization header found");
         return res.status(401).json({ error: "no_authorization_header" });
     }
 
     const parts = authHeader.split(" ");
+    console.log("Authorization parts:", parts);
 
     if (parts.length !== 2 || parts[0] !== "Bearer") {
+        console.log("Invalid authorization format");
         return res.status(400).json({ error: "invalid_authorization_format" });
     }
 
     const token = parts[1];
-    if (!token) return res.status(401).json({ error: "empty_token" });
+    if (!token) {
+        console.log("Token is empty");
+        return res.status(401).json({ error: "empty_token" });
+    }
 
     const db = readData();
+    console.log("Users in DB:", db.user);
+
     const user = (db.user || []).find(u => u.access_token === token);
+    console.log("Matched user:", user);
 
     if (!user) {
+        console.log("Invalid or expired token");
         return res.status(401).json({ error: "invalid_or_expired_token" });
     }
 
     req.user = user; // کاربر معتبر پیدا شد
+    console.log("User authenticated:", user.email);
     next();
 }
+
 
 
 
