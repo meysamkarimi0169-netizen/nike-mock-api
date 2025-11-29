@@ -309,17 +309,47 @@ app.post('/api/v1/cart/remove', authMiddleware, (req, res) => {
 });
 
 
-app.post('/api/v1/cart/changeCount', (req, res) => {
+app.post('/api/v1/cart/changeCount', authMiddleware, (req, res) => {
   const { cart_item_id, count } = req.body || {};
-  if (!cart_item_id) return res.status(400).json({ error: 'cart_item_id required' });
+
+  // 1. بررسی اینکه cart_item_id و count ارسال شده‌اند
+  if (!cart_item_id || count === undefined) {
+    return res.status(400).json({
+      error: "Failed",
+      message: "پارامترها معتبر نیستند"
+    });
+  }
+
   const db = readData();
   db.cart = db.cart || [];
-  const item = db.cart.find(c => c.id === cart_item_id.toString());
-  if (!item) return res.status(404).json({ error: 'not_found' });
-  item.count = parseInt(count);
+
+  // 2. پیدا کردن آیتم در سبد خرید
+  const itemIndex = db.cart.findIndex(
+    item => item.id.toString() === cart_item_id.toString()
+  );
+
+  if (itemIndex === -1) {
+    // 3. اگر آیتم پیدا نشد
+    return res.status(404).json({
+      error: "Failed",
+      message: "شناسه در سبد خرید معتبر نیست"
+    });
+  }
+
+  // 4. تغییر تعداد آیتم
+  db.cart[itemIndex].count = count;
+
+  // 5. ذخیره تغییرات
   writeData(db);
-  res.json({ success: true, item });
+
+  // 6. پاسخ موفقیت آمیز با اطلاعات آیتم
+  return res.json({
+    id: db.cart[itemIndex].id,
+    product_id: db.cart[itemIndex].product_id,
+    count: db.cart[itemIndex].count
+  });
 });
+
 
 app.get('/api/v1/cart/count', (req, res) => {
   const db = readData();
