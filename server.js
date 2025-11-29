@@ -351,11 +351,19 @@ app.post('/api/v1/cart/changeCount', authMiddleware, (req, res) => {
 });
 
 
-app.get('/api/v1/cart/count', (req, res) => {
+app.get('/api/v1/cart/count', authMiddleware, (req, res) => {
   const db = readData();
-  const count = (db.cart || []).length;
-  res.json({ count });
+  db.cart = db.cart || [];
+
+  // تعداد آیتم‌ها
+  const totalCount = db.cart.length;
+
+  // پاسخ
+  return res.json({
+    count: totalCount
+  });
 });
+
 
 // ORDER: list, submit, checkout, update/status
 app.get('/api/v1/order/list', (req, res) => {
