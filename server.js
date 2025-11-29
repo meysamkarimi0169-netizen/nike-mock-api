@@ -227,6 +227,50 @@ app.post('/api/v1/cart/add', authMiddleware, (req, res) => {
   res.json(item);
 });
 
+app.get('/api/v1/cart/list', authMiddleware, (req, res) => {
+  const db = readData();
+
+  db.cart = db.cart || [];
+  db.products = db.products || [];
+
+  // لیست آیتم‌های کاربر فعلی
+  const userCart = db.cart.filter(c => c.user_id === req.user.id);
+
+  // تبدیل به خروجی موردنظر
+  const cart_items = userCart.map(item => {
+    const product = db.products.find(p => p.id.toString() === item.product_id.toString());
+
+    return {
+      cart_item_id: parseInt(item.id),
+      product: product || null,
+      count: item.count
+    };
+  });
+
+  // محاسبه قیمت‌ها
+  let total_price = 0;
+  let payable_price = 0;
+
+  cart_items.forEach(ci => {
+    if (ci.product) {
+      const price = ci.product.price;
+      const discount = ci.product.discount;
+
+      total_price += price * ci.count;
+      payable_price += (price - discount) * ci.count;
+    }
+  });
+
+  res.json({
+    cart_items,
+    payable_price,
+    total_price,
+    shipping_cost: 0
+  });
+});
+
+
+
 app.post('/api/v1/cart/remove', (req, res) => {
   const { cart_item_id } = req.body || {};
   if (!cart_item_id) return res.status(400).json({ error: 'cart_item_id required' });
