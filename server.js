@@ -172,16 +172,33 @@ app.post('/api/v1/user/register', (req, res) => {
 
 // CART: add, list, remove, changeCount, count
 app.post('/api/v1/cart/add', (req, res) => {
-  const { product_id, count, user_id } = req.body || {};
-  if (!product_id) return res.status(400).json({ error: 'product_id required' });
+  const { product_id } = req.body || {};
+  
+  // اعتبارسنجی ورودی
+  if (!product_id) {
+    return res.status(400).json({ error: "product_id required" });
+  }
+
   const db = readData();
   db.cart = db.cart || [];
-  const id = (db.cart.length ? (Math.max(...db.cart.map(c => parseInt(c.id))) + 1) : 1).toString();
-  const item = { id: id.toString(), product_id: product_id.toString(), count: count ? parseInt(count) : 1, user_id: user_id || null };
+
+  // تولید id خودکار
+  const newId = db.cart.length
+    ? Math.max(...db.cart.map(c => parseInt(c.id))) + 1
+    : 1;
+
+  const item = {
+    id: newId,
+    product_id: parseInt(product_id),
+    count: 1
+  };
+
   db.cart.push(item);
   writeData(db);
-  res.json({ success: true, cart_item: item });
+
+  return res.json(item);
 });
+
 
 app.get('/api/v1/cart/list', (req, res) => {
   const db = readData();
