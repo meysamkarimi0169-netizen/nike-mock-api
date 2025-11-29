@@ -139,9 +139,11 @@ app.post('/api/v1/auth/token', (req, res) => {
     // simple refresh echo
     const refresh_token = req.body.refresh_token;
     if (!refresh_token) return res.status(400).json({ error: 'no_refresh_token' });
-    const token = Buffer.from(`refreshed:${Date.now()}`).toString('base64');
+    const new_access_token = Buffer.from(`access:${Date.now()}`).toString('base64');
+    const new_refresh_token = Buffer.from(`refresh:${Date.now()}`).toString('base64');
     return res.json({
-      access_token: token,
+      access_token: new_access_token,
+      refresh_token: new_refresh_token,
       token_type: 'bearer',
       expires_in: 3600
     });
