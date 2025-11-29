@@ -35,7 +35,7 @@ function paginate(items, page = 1, limit = 20) {
 }
 
 function authMiddleware(req, res, next) {
-    const authHeader = req.headers['Authorization'];
+    const authHeader = req.headers['authorization'];
 
     if (!authHeader) {
         return res.status(401).json({ error: "no_authorization_header" });
