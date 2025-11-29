@@ -71,13 +71,17 @@
       "id": 1,
       "email": "test@gmail.com",
       "password": "123456",
-      "name": "Test User"
+      "name": "Test User",
+      "access_token": "dGVzdEBnbWFpbC5jb206MTc2NDQxNzA5MTY4MA==",
+      "refresh_token": ""
     },
     {
       "id": 2,
       "email": "saeedd@gmail.com",
       "password": "saeed",
-      "name": "Saeed D."
+      "name": "Saeed D.",
+      "access_token": "dGVzdEBnbWFpbC5jb206MTc2NDQxNzA5MTY4MA==",
+      "refresh_token": ""
     }
   ],
   "comment": [
