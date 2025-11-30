@@ -266,14 +266,14 @@ app.get('/api/v1/cart/list', authMiddleware, (req, res) => {
   const db = readData();
 
   db.cart = db.cart || [];
-  db.products = db.products || [];
+  db.product = db.product || [];
   console.log("db.products", db.products);
   // لیست آیتم‌های کاربر فعلی
   const userCart = db.cart.filter(c => c.user_id === req.user.id);
 
   // تبدیل به خروجی موردنظر
   const cart_items = userCart.map(item => {
-    const product = db.products.find(p => p.id.toString() === item.product_id.toString());
+    const product = db.product.find(p => p.id.toString() === item.product_id.toString());
     console.log("product p.id item.product_id.toString()", product, p.id.toString(),item.product_id.toString());
     return {
       cart_item_id: parseInt(item.id),
