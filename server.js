@@ -222,32 +222,7 @@ app.post('/api/v1/auth/token', (req, res) => {
 
   res.status(400).json({ error: 'unsupported_grant_type' });
 });
-  } else if (grant_type === 'refresh_token') {
-    const refresh_token = req.body.refresh_token;
-    if (!refresh_token) return res.status(400).json({ error: 'no_refresh_token' });
-
-    const user = (db.user || []).find(u => u.refresh_token === refresh_token);
-    if (!user) return res.status(401).json({ error: 'invalid_refresh_token' });
-
-    // ======= توکن جدید بساز و ذخیره کن =======
-    const token = Buffer.from(`${user.email}:${Date.now()}`).toString('base64');
-    const new_refresh_token = Buffer.from(`refresh:${user.email}:${Date.now()}`).toString('base64');
-
-    user.access_token = token;
-    user.refresh_token = new_refresh_token;
-    writeData(db);
-    // ========================================
-
-    return res.json({
-      access_token: token,
-      token_type: 'bearer',
-      refresh_token: new_refresh_token,
-      expires_in: 3600
-    });
-  }
-
-  res.status(400).json({ error: 'unsupported_grant_type' });
-});
+ 
 
 
 
