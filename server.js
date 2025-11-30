@@ -274,7 +274,7 @@ app.get('/api/v1/cart/list', authMiddleware, (req, res) => {
   // تبدیل به خروجی موردنظر
   const cart_items = userCart.map(item => {
     const product = db.products.find(p => p.id.toString() === item.product_id.toString());
-
+    console.log("product p.id item.product_id.toString()", product, p.id.toString(),item.product_id.toString());
     return {
       cart_item_id: parseInt(item.id),
       product: product || null,
