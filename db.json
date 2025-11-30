@@ -176,6 +176,19 @@
     }
     }
   ],
-  "cart": [],
+    "cart": [
+    {
+      "id": 4370,
+      "user_id": 1,
+      "product_id": 6,
+      "count": 3
+    },
+    {
+      "id": 4303,
+      "user_id": 1,
+      "product_id": 2,
+      "count": 1
+    }
+  ],
   "order": []
 }
