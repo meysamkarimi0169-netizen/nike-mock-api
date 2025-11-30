@@ -267,7 +267,7 @@ app.get('/api/v1/cart/list', authMiddleware, (req, res) => {
 
   db.cart = db.cart || [];
   db.products = db.products || [];
-
+  console.log("db.products", db.products);
   // لیست آیتم‌های کاربر فعلی
   const userCart = db.cart.filter(c => c.user_id === req.user.id);
 
