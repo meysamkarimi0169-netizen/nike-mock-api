@@ -35,6 +35,8 @@ function paginate(items, page = 1, limit = 20) {
 }
 
 function authMiddleware(req, res, next) {
+      console.log("0authHeader:"); // لاگ هدر Authorization
+
     const authHeader = req.headers['authorization'];
     console.log("authHeader:", authHeader); // لاگ هدر Authorization
 
