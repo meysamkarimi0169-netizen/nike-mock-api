@@ -60,18 +60,18 @@ function authMiddleware(req, res, next) {
     }
 
     const db = readData();
-    console.log("Users in DB:", db.user);
+  //  console.log("Users in DB:", db.user);
 
     const user = (db.user || []).find(u => u.access_token === token);
     console.log("Matched user:", user);
 
     if (!user) {
-        console.log("Invalid or expired token");
+        //console.log("Invalid or expired token");
         return res.status(401).json({ error: "invalid_or_expired_token" });
     }
 
     req.user = user; // کاربر معتبر پیدا شد
-    console.log("User authenticated:", user.email);
+    //console.log("User authenticated:", user.email);
     next();
 }
 
@@ -131,9 +131,9 @@ app.use(express.urlencoded({ extended: true }));
 // مسیر oauth/token
 app.post('/api/v1/oauth/token', upload.none(), (req, res) => {
   const db = readData();
-  console.log('req.body:', req.body); // نمایش داده‌ها برای debug
+  // console.log('req.body:', req.body); // نمایش داده‌ها برای debug
   const { grant_type, username, password, refresh_token } = req.body;
-  console.log("Incoming body:", req.body);
+ // console.log("Incoming body:", req.body);
   if (grant_type === 'password') {
     const user = (db.user || []).find(u => u.email === username && u.password === password);
     if (!user) return res.status(400).json({ error: 'invalid_credentials' });
@@ -278,7 +278,7 @@ app.get('/api/v1/cart/list', authMiddleware, (req, res) => {
 
   db.cart = db.cart || [];
   db.product = db.product || [];
-  console.log("db.product", db.product);
+  //console.log("db.product", db.product);
   // لیست آیتم‌های کاربر فعلی
   const userCart = db.cart.filter(c => c.user_id === req.user.id);
 
@@ -480,5 +480,5 @@ app.get('/', (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log('Server listening on port', PORT);
+  //console.log('Server listening on port', PORT);
 });
