@@ -416,16 +416,48 @@ app.get('/api/v1/order/list', (req, res) => {
   res.json(db.order || []);
 });
 
-app.post('/api/v1/order/submit', (req, res) => {
-  const order = req.body || {};
+app.post('/api/v1/order/submit', authMiddleware, (req, res) => {
+  const { first_name, last_name, postal_code, mobile, address, payment_method } = req.body || {};
+
+  // اعتبارسنجی ورودی‌ها
+  if (!first_name || !last_name || !postal_code || !mobile || !address || !payment_method) {
+    return res.status(400).json({
+      error: "invalid_data",
+      message: "اطلاعات سفارش ناقص است"
+    });
+  }
+
   const db = readData();
   db.order = db.order || [];
-  const id = (db.order.length ? (Math.max(...db.order.map(o => parseInt(o.id))) + 1) : 1).toString();
-  const newOrder = Object.assign({ id: id.toString(), status: 'pending', created_at: new Date().toISOString() }, order);
+
+  // ساختن آیدی جدید سفارش
+  const newId = db.order.length
+    ? Math.max(...db.order.map(o => parseInt(o.id))) + 1
+    : 1;
+
+  const newOrder = {
+    id: newId,
+    user_id: req.user.id,  // سفارش متعلق به یوزر لاگین شده
+    first_name,
+    last_name,
+    postal_code,
+    mobile,
+    address,
+    payment_method,
+    status: "pending",
+    created_at: new Date().toISOString()
+  };
+
   db.order.push(newOrder);
   writeData(db);
-  res.json({ success: true, order: newOrder });
+
+  // پاسخ مطابق تصویر تو
+  return res.json({
+    order_id: newId,
+    bank_gateway_url: ""
+  });
 });
+
 
 app.get('/api/v1/order/checkout', (req, res) => {
   const order_id = req.query.order_id;
