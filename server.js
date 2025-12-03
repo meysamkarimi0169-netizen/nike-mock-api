@@ -464,14 +464,32 @@ if (!postal_code || postal_code.length < 10) {
 
 
 app.get('/api/v1/order/checkout', (req, res) => {
-  const order_id = req.query.order_id;
+  const order_id = parseInt(req.query.order_id);
   const db = readData();
-  const order = (db.order || []).find(o => o.id === (order_id || '').toString());
-  if (!order) return res.status(404).json({ error: 'order_not_found' });
-  // simulate checkout success
-  order.status = 'payed';
-  writeData(db);
-  res.json({ success: true, order });
+
+  if (!order_id) {
+    return res.status(400).json({
+      message: "order_id الزامی است."
+    });
+  }
+
+  // پیدا کردن سفارش
+  const order = (db.order || []).find(o => o.id === order_id);
+
+  if (!order) {
+    return res.status(404).json({
+      purchase_success: false,
+      payable_price: 0,
+      payment_status: "سفارشی با این شناسه پیدا نشد"
+    });
+  }
+
+  // اگر سفارش پیدا شد این را برگردان
+  return res.json({
+    purchase_success: false,         // تا زمانی که پرداخت نشده
+    payable_price: order.payable_price,
+    payment_status: "در انتظار پرداخت"
+  });
 });
 
 app.get('/api/v1/order/update/status', (req, res) => {
