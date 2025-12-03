@@ -426,7 +426,11 @@ app.post('/api/v1/order/submit', authMiddleware, (req, res) => {
       message: "اطلاعات سفارش ناقص است"
     });
   }
-
+if (!postal_code || postal_code.length < 10) {
+    return res.status(400).json({
+      message: "کد پستی باید حداقل ۱۰ رقم باشد."
+    });
+  }
   const db = readData();
   db.order = db.order || [];
 
