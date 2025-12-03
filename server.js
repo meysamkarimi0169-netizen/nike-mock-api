@@ -487,7 +487,7 @@ app.get('/api/v1/order/checkout', (req, res) => {
   // اگر سفارش پیدا شد این را برگردان
   return res.json({
     purchase_success: false,         // تا زمانی که پرداخت نشده
-    payable_price:  99988800 //order.payable_price,
+    payable_price:  99988800, //order.payable_price,
     payment_status: "در انتظار پرداخت"
   });
 });
