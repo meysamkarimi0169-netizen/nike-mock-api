@@ -463,6 +463,7 @@ if (!postal_code || postal_code.length < 10) {
 });
 
 
+
 app.get('/api/v1/order/checkout', (req, res) => {
   const order_id = parseInt(req.query.order_id);
   const db = readData();
@@ -484,13 +485,23 @@ app.get('/api/v1/order/checkout', (req, res) => {
     });
   }
 
-  // اگر سفارش پیدا شد این را برگردان
-  return res.json({
-    purchase_success: false,         // تا زمانی که پرداخت نشده
-    payable_price:  99988800, //order.payable_price,
+  // خروجی پایه
+  const response = {
+    purchase_success: false,
+    payable_price: order.payable_price,
     payment_status: "در انتظار پرداخت"
-  });
+  };
+
+  // اگر پرداخت آنلاین بود یک لینک بده
+  if (order.payment_method === "online") {
+    response.payment_url =
+      `https://your-payment-gateway.com/pay?order_id=${order_id}`;
+  }
+
+  return res.json(response);
 });
+
+
 
 app.get('/api/v1/order/update/status', (req, res) => {
   const order_id = req.query.order_id || req.query.id;
