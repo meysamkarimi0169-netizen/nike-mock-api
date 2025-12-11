@@ -456,10 +456,18 @@ if (!postal_code || postal_code.length < 10) {
   writeData(db);
 
   // پاسخ مطابق تصویر تو
+  if(payment_method==="online"){
+  return res.json({
+    order_id: newId,
+    bank_gateway_url: "https://www.google.com/"
+  });
+  }
+  else{
   return res.json({
     order_id: newId,
     bank_gateway_url: ""
   });
+  }
 });
 
 
