@@ -494,7 +494,7 @@ app.get('/api/v1/order/checkout', (req, res) => {
 
   // اگر پرداخت آنلاین بود یک لینک بده
   if (order.payment_method === "online") {
-    response.payment_url =
+    response.bank_gateway_url =
       `https://your-payment-gateway.com/pay?order_id=${order_id}`;
   }
 
