@@ -465,18 +465,20 @@ if (!postal_code || postal_code.length < 10) {
 
 
 app.get('/api/v1/order/checkout', (req, res) => {
-  const order_id = parseInt(req.query.order_id);
+  const order_id = Number(req.query.order_id);
   const db = readData();
 
+  // اعتبارسنجی order_id
   if (!order_id) {
     return res.status(400).json({
       message: "order_id الزامی است."
     });
   }
 
-  // پیدا کردن سفارش
+  // پیدا کردن سفارش در دیتابیس
   const order = (db.order || []).find(o => o.id === order_id);
 
+  // اگر سفارش پیدا نشد
   if (!order) {
     return res.status(404).json({
       purchase_success: false,
@@ -485,21 +487,14 @@ app.get('/api/v1/order/checkout', (req, res) => {
     });
   }
 
-  // خروجی پایه
-  const response = {
-    purchase_success: false,
-    payable_price: order.payable_price,
+  // خروجی نهایی
+  return res.json({
+    purchase_success: false,        // تا قبل از پرداخت
+    payable_price: order.payable_price ?? 0,
     payment_status: "در انتظار پرداخت"
-  };
-
-  // اگر پرداخت آنلاین بود یک لینک بده
-  if (order.payment_method === "online") {
-    response.bank_gateway_url =
-      `https://your-payment-gateway.com/pay?order_id=${order_id}`;
-  }
-
-  return res.json(response);
+  });
 });
+
 
 
 
