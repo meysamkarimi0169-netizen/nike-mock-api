@@ -314,6 +314,34 @@ app.get('/api/v1/cart/list', authMiddleware, (req, res) => {
   });
 });
 
+app.get('/api/v1/payment', (req, res) => {
+  const orderId = req.query.order_id || 1234;
+
+  res.send(`
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <title>Payment</title>
+        <meta charset="utf-8"/>
+      </head>
+      <body style="font-family: sans-serif; text-align:center; margin-top:100px;">
+        <h2>پرداخت تستی</h2>
+
+        <button onclick="pay()" style="font-size:20px;padding:10px 30px;">
+          پرداخت
+        </button>
+
+        <script>
+          function pay() {
+            window.location.href =
+              "https://expertdevelopers.ir/checkout?order_id=${orderId}";
+          }
+        </script>
+      </body>
+    </html>
+  `);
+});
+
 
 
 app.post('/api/v1/cart/remove', authMiddleware, (req, res) => {
