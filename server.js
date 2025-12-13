@@ -334,7 +334,7 @@ app.get('/api/v1/payment', (req, res) => {
         <script>
           function pay() {
             window.location.href =
-              "https://expertdevelopers.ir/checkout?order_id=${orderId}";
+              "https://nike-mock-api.onrender.com/api/v1/order/checkout?order_id=${orderId}";
           }
         </script>
       </body>
