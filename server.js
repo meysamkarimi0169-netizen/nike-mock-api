@@ -494,7 +494,7 @@ if (!postal_code || postal_code.length < 10) {
   if(payment_method==="online"){
   return res.json({
     order_id: newId,
-    bank_gateway_url:  'https://nike-mock-api.onrender.com/api/v1/payment?order_id=${newId}'
+    bank_gateway_url:  `https://nike-mock-api.onrender.com/api/v1/payment?order_id=${newId}`
   });
   }
   else{
