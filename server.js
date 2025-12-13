@@ -314,20 +314,26 @@ app.get('/api/v1/cart/list', authMiddleware, (req, res) => {
   });
 });
 
+
 app.get('/api/v1/payment', (req, res) => {
-  const orderId = req.query.order_id || 1234;
+  // اگر order_id نیومده، خود سرور بسازه
+  const orderId =
+    req.query.order_id || Math.floor(Math.random() * 100000 + 1);
 
   res.send(`
     <!DOCTYPE html>
     <html>
       <head>
-        <title>Payment</title>
         <meta charset="utf-8"/>
+        <title>Payment</title>
       </head>
-      <body style="font-family: sans-serif; text-align:center; margin-top:100px;">
+      <body style="text-align:center;margin-top:100px">
         <h2>پرداخت تستی</h2>
 
-        <button onclick="pay()" style="font-size:20px;padding:10px 30px;">
+        <p>Order ID: ${orderId}</p>
+
+        <button onclick="pay()"
+          style="font-size:18px;padding:10px 30px">
           پرداخت
         </button>
 
@@ -341,6 +347,7 @@ app.get('/api/v1/payment', (req, res) => {
     </html>
   `);
 });
+
 
 
 
@@ -487,7 +494,7 @@ if (!postal_code || postal_code.length < 10) {
   if(payment_method==="online"){
   return res.json({
     order_id: newId,
-    bank_gateway_url:  "https://nike-mock-api.onrender.com/api/v1/payment?order_id=$newId"
+    bank_gateway_url:  'https://nike-mock-api.onrender.com/api/v1/payment?order_id=${newId}'
   });
   }
   else{
