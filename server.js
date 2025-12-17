@@ -448,8 +448,34 @@ app.get('/api/v1/cart/count', authMiddleware, (req, res) => {
 // ORDER: list, submit, checkout, update/status
 app.get('/api/v1/order/list', (req, res) => {
   const db = readData();
-  res.json(db.order || []);
+
+  const orders = db.order || [];
+  const orderItems = db.order_item || [];
+  const products = db.product || [];
+
+  const result = orders.map(order => {
+    // آیتم‌های مربوط به این سفارش
+    const items = orderItems
+      .filter(oi => oi.order_id == order.id)
+      .map(oi => {
+        // محصول مربوط به آیتم
+        const product = products.find(p => p.id == oi.product_id);
+
+        return {
+          ...oi,
+          product: product || null
+        };
+      });
+
+    return {
+      ...order,
+      order_items: items
+    };
+  });
+
+  res.json(result);
 });
+
 
 app.post('/api/v1/order/submit', authMiddleware, (req, res) => {
   const { first_name, last_name, postal_code, mobile, address, payment_method } = req.body || {};
