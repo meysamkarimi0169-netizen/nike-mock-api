@@ -190,5 +190,41 @@
       "count": 1
     }
   ],
-  "order": []
+ "order": [
+  {
+    "id": 78,
+    "first_name": "سعید",
+    "last_name": "حسینی",
+    "postal_code": "1767717677",
+    "phone": "09378122153",
+    "address": "تهران - صادقیه - بلوار فردوس",
+    "payable": 5899000,
+    "total": 6079000,
+    "shipping_cost": 0,
+    "payment_status": "waiting",
+    "payment_method": "online",
+    "user_id": 1,
+    "date": "1403/08/29 10:20"
+  }
+],
+  "order_item": [
+  {
+    "id": 425,
+    "order_id": 78,
+    "product_id": 5,
+    "count": 3,
+    "price": 150000,
+    "discount": 0
+  },
+  {
+    "id": 426,
+    "order_id": 78,
+    "product_id": 2,
+    "count": 1,
+    "price": 790000,
+    "discount": 0
+  }
+]
+
+
 }
