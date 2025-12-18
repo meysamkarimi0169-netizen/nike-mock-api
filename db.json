@@ -204,10 +204,8 @@
     "payment_status": "waiting",
     "payment_method": "online",
     "user_id": 1,
-    "date": "1403/08/29 10:20"
-  }
-],
-  "order_item": [
+    "date": "1403/08/29 10:20",
+      "order_item": [
   {
     "id": 425,
     "order_id": 78,
@@ -225,6 +223,9 @@
     "discount": 0
   }
 ]
+  }
+],
+
 
 
 }
