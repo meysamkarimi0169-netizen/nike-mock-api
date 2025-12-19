@@ -482,18 +482,23 @@ app.get('/api/v1/order/list', (req, res) => {
   const db = readData();
 
   let orders = db.order || [];
+  const products = db.product || [];
 
-  // اگر user_id فرستاده شده بود، فیلتر کن
   if (user_id) {
-    orders = orders.filter(
-      o => o.user_id === Number(user_id)
-    );
+    orders = orders.filter(o => o.user_id === Number(user_id));
   }
 
-  // ❗️هیچ تغییری نمی‌ده
-  // ❗️همون ساختار Nested رو برمی‌گردونه
-  res.json(orders);
+  const result = orders.map(order => ({
+    ...order,
+    order_item: order.order_item.map(item => ({
+      ...item,
+      product: products.find(p => p.id === item.product_id) || null
+    }))
+  }));
+
+  res.json(result);
 });
+
 
 
 
