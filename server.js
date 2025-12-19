@@ -477,23 +477,6 @@ app.get('/api/v1/order/list', (req, res) => {
 });
 
 
-// app.get('/api/v1/order/list', (req, res) => {
-//   const { user_id } = req.query;
-//   const db = readData();
-
-//   let orders = db.order || [];
-
-//   // اگر user_id فرستاده شده بود، فیلتر کن
-//   if (user_id) {
-//     orders = orders.filter(
-//       o => o.user_id === Number(user_id)
-//     );
-//   }
-
-//   // ❗️هیچ تغییری نمی‌ده
-//   // ❗️همون ساختار Nested رو برمی‌گردونه
-//   res.json(orders);
-// });
 
 
 app.post('/api/v1/order/submit', authMiddleware, (req, res) => {
