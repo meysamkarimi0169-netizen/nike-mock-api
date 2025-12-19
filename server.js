@@ -446,34 +446,53 @@ app.get('/api/v1/cart/count', authMiddleware, (req, res) => {
 
 
 // ORDER: list, submit, checkout, update/status
+// app.get('/api/v1/order/list', (req, res) => {
+//   const db = readData();
+
+//   const orders = db.order || [];
+//   const orderItems = db.order_item || [];
+//   const products = db.product || [];
+
+//   const result = orders.map(order => {
+//     // آیتم‌های مربوط به این سفارش
+//     const items = orderItems
+//       .filter(oi => oi.order_id == order.id)
+//       .map(oi => {
+//         // محصول مربوط به آیتم
+//         const product = products.find(p => p.id == oi.product_id);
+
+//         return {
+//           ...oi,
+//           product: product || null
+//         };
+//       });
+
+//     return {
+//       ...order,
+//       order_items: items
+//     };
+//   });
+
+//   res.json(result);
+// });
+
+
 app.get('/api/v1/order/list', (req, res) => {
+  const { user_id } = req.query;
   const db = readData();
 
-  const orders = db.order || [];
-  const orderItems = db.order_item || [];
-  const products = db.product || [];
+  let orders = db.order || [];
 
-  const result = orders.map(order => {
-    // آیتم‌های مربوط به این سفارش
-    const items = orderItems
-      .filter(oi => oi.order_id == order.id)
-      .map(oi => {
-        // محصول مربوط به آیتم
-        const product = products.find(p => p.id == oi.product_id);
+  // اگر user_id فرستاده شده بود، فیلتر کن
+  if (user_id) {
+    orders = orders.filter(
+      o => o.user_id === Number(user_id)
+    );
+  }
 
-        return {
-          ...oi,
-          product: product || null
-        };
-      });
-
-    return {
-      ...order,
-      order_items: items
-    };
-  });
-
-  res.json(result);
+  // ❗️هیچ تغییری نمی‌ده
+  // ❗️همون ساختار Nested رو برمی‌گردونه
+  res.json(orders);
 });
 
 
