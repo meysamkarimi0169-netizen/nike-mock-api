@@ -254,6 +254,30 @@
     "count": 1,
     "price": 790000,
     "discount": 0
+  },
+  {
+    "id": 425,
+    "order_id": 78,
+    "product_id": 5,
+    "count": 3,
+    "price": 150000,
+    "discount": 0
+  },
+  {
+    "id": 426,
+    "order_id": 78,
+    "product_id": 4,
+    "count": 1,
+    "price": 790000,
+    "discount": 0
+  },
+          {
+    "id": 426,
+    "order_id": 78,
+    "product_id": 3,
+    "count": 1,
+    "price": 790000,
+    "discount": 0
   }
 ]
   },
