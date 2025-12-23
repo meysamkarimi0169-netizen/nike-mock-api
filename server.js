@@ -616,17 +616,51 @@ app.get('/api/v1/comment/list', (req, res) => {
   res.json(comments);
 });
 
+// app.post('/api/v1/comment/add', (req, res) => {
+//   const { title, content, product_id, user } = req.body || {};
+//   if (!product_id) return res.status(400).json({ error: 'product_id required' });
+//   const db = readData();
+//   db.comment = db.comment || [];
+//   const id = (db.comment.length ? (Math.max(...db.comment.map(c => parseInt(c.id))) + 1) : 1).toString();
+//   const newComment = { id: id.toString(), product_id: product_id.toString(), title: title || '', content: content || '', user: user || 'anonymous' };
+//   db.comment.push(newComment);
+//   writeData(db);
+//   res.json({ success: true, comment: newComment });
+// });
+
 app.post('/api/v1/comment/add', (req, res) => {
-  const { title, content, product_id, user } = req.body || {};
-  if (!product_id) return res.status(400).json({ error: 'product_id required' });
-  const db = readData();
-  db.comment = db.comment || [];
-  const id = (db.comment.length ? (Math.max(...db.comment.map(c => parseInt(c.id))) + 1) : 1).toString();
-  const newComment = { id: id.toString(), product_id: product_id.toString(), title: title || '', content: content || '', user: user || 'anonymous' };
-  db.comment.push(newComment);
-  writeData(db);
-  res.json({ success: true, comment: newComment });
+  const { title, content, product_id } = req.query;
+
+  if (!title || !content || !product_id) {
+    return res.status(400).json({
+      message: 'title, content و product_id الزامی هستند'
+    });
+  }
+
+  const db = JSON.parse(fs.readFileSync(DATA_FILE, 'utf-8'));
+
+  const newComment = {
+    id: Date.now(), // یا هر روش دلخواه
+    title,
+    content,
+    product_id: Number(product_id),
+    date: new Date().toISOString(),
+    author: {
+      email: "Meysam.karimi0669@gmail.com"
+    }
+  };
+
+  if (!db.comments) {
+    db.comments = [];
+  }
+
+  db.comments.push(newComment);
+
+  fs.writeFileSync(DATA_FILE, JSON.stringify(db, null, 2));
+
+  res.json(newComment);
 });
+
 
 // fallback message
 app.get('/', (req, res) => {
