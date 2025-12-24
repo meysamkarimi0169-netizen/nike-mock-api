@@ -632,7 +632,7 @@ app.post('/api/v1/comment/add', (req, res) => {
   const { title, content, product_id } = req.query;
 
   if (!title || !content || !product_id) {
-    console.log("Incoming body:", req.body);
+    console.log("Incoming body:",!title," ",!content," " , !product_id);
     return res.status(400).json({
       message: 'title, content و product_id الزامی هستند'
     });
