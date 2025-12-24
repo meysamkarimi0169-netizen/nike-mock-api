@@ -630,9 +630,8 @@ app.get('/api/v1/comment/list', (req, res) => {
 
 app.post('/api/v1/comment/add', (req, res) => {
   const { title, content, product_id } = req.body;
- console.log("title, content, product_id",title," ",content," " , product_id);
+
   if (!title || !content || !product_id) {
-    console.log("Incoming body:",!title," ",!content," " , !product_id);
     return res.status(400).json({
       message: 'title, content و product_id الزامی هستند'
     });
@@ -641,7 +640,7 @@ app.post('/api/v1/comment/add', (req, res) => {
   const db = JSON.parse(fs.readFileSync(DATA_FILE, 'utf-8'));
 
   const newComment = {
-    id: Date.now(), // یا هر روش دلخواه
+    id: Date.now(),
     title,
     content,
     product_id: Number(product_id),
@@ -650,18 +649,18 @@ app.post('/api/v1/comment/add', (req, res) => {
       email: "Meysam.karimi0669@gmail.com"
     }
   };
-console.log(db.comment.length);
+
   if (!db.comment) {
     db.comment = [];
   }
 
   db.comment.push(newComment);
-  console.log(db.comment.length);
 
   fs.writeFileSync(DATA_FILE, JSON.stringify(db, null, 2));
 
   res.json(newComment);
 });
+
 
 
 // fallback message
