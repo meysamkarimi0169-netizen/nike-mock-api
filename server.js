@@ -651,12 +651,11 @@ app.post('/api/v1/comment/add', (req, res) => {
     }
   };
 
-  if (!db.comments) {
-    console.log("2_Incoming body:", req.body);
-    db.comments = [];
+  if (!db.comment) {
+    db.comment = [];
   }
 
-  db.comments.push(newComment);
+  db.comment.push(newComment);
 console.log("newComment:", newComment);
   fs.writeFileSync(DATA_FILE, JSON.stringify(db, null, 2));
 
