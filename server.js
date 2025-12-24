@@ -650,13 +650,14 @@ app.post('/api/v1/comment/add', (req, res) => {
       email: "Meysam.karimi0669@gmail.com"
     }
   };
-
+console.log(db.comment.length);
   if (!db.comment) {
     db.comment = [];
   }
 
   db.comment.push(newComment);
-console.log("newComment:", newComment);
+  console.log(db.comment.length);
+
   fs.writeFileSync(DATA_FILE, JSON.stringify(db, null, 2));
 
   res.json(newComment);
