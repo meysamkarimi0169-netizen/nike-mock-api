@@ -632,6 +632,7 @@ app.post('/api/v1/comment/add', (req, res) => {
   const { title, content, product_id } = req.query;
 
   if (!title || !content || !product_id) {
+    console.log("Incoming body:", req.body);
     return res.status(400).json({
       message: 'title, content و product_id الزامی هستند'
     });
@@ -651,11 +652,12 @@ app.post('/api/v1/comment/add', (req, res) => {
   };
 
   if (!db.comments) {
+    console.log("2_Incoming body:", req.body);
     db.comments = [];
   }
 
   db.comments.push(newComment);
-
+console.log("newComment:", newComment);
   fs.writeFileSync(DATA_FILE, JSON.stringify(db, null, 2));
 
   res.json(newComment);
