@@ -629,7 +629,7 @@ app.get('/api/v1/comment/list', (req, res) => {
 // });
 
 app.post('/api/v1/comment/add', (req, res) => {
-  const { title, content, product_id } = req.query;
+  const { title, content, product_id } = req.body;
  console.log("title, content, product_id",title," ",content," " , product_id);
   if (!title || !content || !product_id) {
     console.log("Incoming body:",!title," ",!content," " , !product_id);
