@@ -628,12 +628,12 @@ app.get('/api/v1/comment/list', (req, res) => {
 //   res.json({ success: true, comment: newComment });
 // });
 
-app.post('/api/v1/comment/add', (req, res) => {
+app.post('/api/v1/comment/add', authMiddleware, (req, res) => {
   const { title, content, product_id } = req.body;
 
   if (!title || !content || !product_id) {
     return res.status(400).json({
-      message: 'title, content و product_id الزامی هستند'
+      message: 'title، content و product_id الزامی هستند'
     });
   }
 
@@ -645,8 +645,11 @@ app.post('/api/v1/comment/add', (req, res) => {
     content,
     product_id: Number(product_id),
     date: new Date().toISOString(),
+
+    // 👇 اطلاعات کاربر لاگین‌شده
     author: {
-      email: "Meysam.karimi0669@gmail.com"
+      id: req.user.id,
+      email: req.user.email
     }
   };
 
@@ -658,8 +661,9 @@ app.post('/api/v1/comment/add', (req, res) => {
 
   fs.writeFileSync(DATA_FILE, JSON.stringify(db, null, 2));
 
-  res.json(newComment);
+  return res.json(newComment);
 });
+
 
 
 
